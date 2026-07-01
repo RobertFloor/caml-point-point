@@ -1,0 +1,30 @@
+### Send XML Person through the Camel pipeline (-> Kafka -> /quarkus/hello)
+POST http://localhost:8080/api/data
+Content-Type: application/xml
+
+<person>
+    <name>Alice Smith</name>
+    <birthday>1990-06-15</birthday>
+</person>
+
+###
+
+### Send another person through the pipeline
+POST http://localhost:8080/api/data
+Content-Type: application/xml
+
+<person>
+    <name>Bob Johnson</name>
+    <birthday>1985-03-22</birthday>
+</person>
+
+###
+
+### Call the Quarkus receiver endpoint directly (mocks a downstream application)
+POST http://localhost:8080/quarkus/hello
+Content-Type: application/json
+
+{
+  "name": "Carol White",
+  "birthday": "1995-11-30"
+}
