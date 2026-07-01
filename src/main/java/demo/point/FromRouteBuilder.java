@@ -2,6 +2,7 @@ package demo.point;
 
 import demo.model.Person;
 import jakarta.xml.bind.JAXBContext;
+import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.converter.jaxb.JaxbDataFormat;
@@ -21,6 +22,10 @@ public class FromRouteBuilder extends RouteBuilder {
                 .unmarshal(jaxb)
 
                 .marshal().json(JsonLibrary.Jackson)
-                .to(ExchangePattern.InOnly, "kafka:person");
+                .to(ExchangePattern.InOnly, "kafka:person")
+                .process(e -> {
+                    e.getMessage().setBody("Request accepted", String.class);
+                    e.getMessage().setHeader(Exchange.HTTP_RESPONSE_CODE, 201);
+                });
     }
 }
